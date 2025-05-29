@@ -1,8 +1,8 @@
-const User = require("../../models/userModel")
+const User = require("../../../models/userModel")
 
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const sendEmail = require("../../Services/sendEmail")
+const sendEmail = require("../../../Services/sendEmail")
 
 
 exports.registerUser = async(req,res)=>{
@@ -12,6 +12,7 @@ exports.registerUser = async(req,res)=>{
             message : "Please provide email,password,phoneNumber"
         })
     }
+    
     // check if that email user already exist or not
    const userFound =  await User.find({userEmail : email})
     if(userFound.length > 0 ){
@@ -100,7 +101,7 @@ exports.forgotPassword = async (req,res)=>{
     await userExist[0].save()
    await sendEmail({
         email :email,
-        subject : "Your Otp for digitalMOMO forgotPassword",
+        subject : "Your Otp for KitchenStore forgotPassword",
         message : `Your otp is ${otp} . Dont share with anyone`
     })
     res.status(200).json({

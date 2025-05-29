@@ -9,7 +9,7 @@ const isAuthenticated = async (req,res,next)=>{
             message : "Please login"
         })
     }
-    
+  
   try {
     
     const decoded = await promisify(jwt.verify)(token,process.env.SECRET_KEY)
@@ -24,16 +24,13 @@ const isAuthenticated = async (req,res,next)=>{
    req.user  = doesUserExist
 
    next()
+
   } catch (error) {
     res.status(500).json({
         message : error.message
     })
   }
     // check if decoded.id(userId) exists in the user table
-
- 
-
-  
 
 }
 

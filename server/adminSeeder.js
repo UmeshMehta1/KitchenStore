@@ -14,7 +14,6 @@ const adminSeeder = async()=>{
         userPhoneNumber : "98123232",
         userName : "admin",
         role : "admin"
-    
      })
     
      console.log("Admin seeded successfully")

@@ -7,7 +7,7 @@ exports.connectDatabase = async(URI)=>{
     // connecting to database 
 
 mongoose.connect(URI)
-
+console.log("Database connected successfully")
 adminSeeder()
 
 
