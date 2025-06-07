@@ -1,7 +1,24 @@
 import "./App.css";
-
+import Navbar from "./global/components/navbar/Navbar";
+import Login from "./pages/auth/login/Login";
+import Registration from "./pages/auth/registraion/Registration";
+import ProductDetail from "./pages/component/productCom/productDetail";
+import Products from "./pages/Home/component/product/Products";
+import Home from "./pages/Home/Home";
+import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 function App() {
-  return <h1 class="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/products/" element={<Products />} />
+        <Route path="/productdetails/:id" element={<ProductDetail />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
