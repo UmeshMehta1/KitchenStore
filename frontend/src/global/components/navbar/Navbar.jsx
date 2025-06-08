@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchToCart } from "../../../store/cartSlice";
+import { logOut } from "../../../store/authSlice";
 const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { item: user } = useSelector((state) => state.cart);
+  console.log("user data navbar", user);
+
+  const handleLogOut = () => {
+    // empty the data from auth store
+    dispatch(logOut());
+    // localstorage remove/clear
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    dispatch(fetchToCart());
+  }, [dispatch]);
   return (
     <div>
       <div className="w-full">
@@ -55,45 +75,60 @@ const Navbar = () => {
                     />
                   </svg>
                 </a>
-                <a
-                  className="relative flex items-center hover:text-gray-200"
-                  href="#"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                {user.length !== 0 && (
+                  <a
+                    className="relative flex items-center hover:text-gray-200"
+                    onClick={() => navigate("/cart")}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <span className="flex absolute -top-2 -right-2">
-                    <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-pink-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-pink-500"></span>
-                  </span>
-                </a>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                    <span className="flex absolute -top-2 -right-2 ">
+                      {user.length}
+                    </span>
+                  </a>
+                )}
               </div>
 
               {/* Auth Buttons */}
               <div className="hidden md:flex items-center space-x-4">
-                <Link
-                  to="/login"
-                  className="px-4 py-2 border border-white rounded hover:bg-white hover:text-gray-900 transition"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 bg-pink-500 rounded hover:bg-pink-600 transition"
-                >
-                  Sign Up
-                </Link>
+                {user.length == 0 &&
+                (localStorage.getItem("token") == "" ||
+                  localStorage.getItem("token") == null ||
+                  localStorage.getItem("token") == undefined) ? (
+                  <>
+                    <Link
+                      to="/login"
+                      className="px-4 py-2 border border-white rounded hover:bg-white hover:text-gray-900 transition"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="px-4 py-2 bg-pink-500 rounded hover:bg-pink-600 transition"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                ) : (
+                  <a
+                    onClick={handleLogOut}
+                    className="px-4 py-2 bg-pink-500 rounded hover:bg-pink-600 transition"
+                  >
+                    Logout
+                  </a>
+                )}
               </div>
 
               {/* Mobile menu icons */}

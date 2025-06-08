@@ -1,20 +1,35 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetails } from "../../../store/productSlice";
-
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../../store/cartSlice";
 const Product = ({ id: productId }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchProductDetails(productId));
   }, [dispatch, productId]);
 
-  const { selectedProduct } = useSelector((state) => state.product);
+  const { data: user, selectedProduct } = useSelector((state) => state.product);
+  console.log(user);
 
   const product = selectedProduct?.product?.[0];
 
   // console.log("product images", product.productImage);
   console.log("product hello", product);
+
+  const handleCart = () => {
+    if (
+      user.length == 0 &&
+      (localStorage.getItem("token") == "" ||
+        localStorage.getItem("token") == null ||
+        localStorage.getItem("token") == undefined)
+    ) {
+      return navigate("/login");
+    }
+    dispatch(addToCart(productId));
+  };
 
   if (!product) {
     return <div className="text-center py-10">Loading product...</div>;
@@ -155,7 +170,10 @@ const Product = ({ id: productId }) => {
               <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
                 Buy Now
               </button>
-              <button className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+              <button
+                onClick={handleCart}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+              >
                 Add to Cart
               </button>
             </div>

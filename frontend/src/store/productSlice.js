@@ -34,7 +34,7 @@ export function fetchProducts(){
         dispatch(setStatus(STATUSES.LOADING))
         try {
             const response = await API.get("/products")
-            console.log(response.data)
+            // console.log(response.data)
             dispatch(setProducts(response?.data?.data))
             dispatch(setStatus(STATUSES.SUCCESS))
         } catch (error) {

@@ -2,6 +2,7 @@ import "./App.css";
 import Navbar from "./global/components/navbar/Navbar";
 import Login from "./pages/auth/login/Login";
 import Registration from "./pages/auth/registraion/Registration";
+import Cart from "./pages/cart/Cart";
 import ProductDetail from "./pages/component/productCom/productDetail";
 import Products from "./pages/Home/component/product/Products";
 import Home from "./pages/Home/Home";
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/products/" element={<Products />} />
         <Route path="/productdetails/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   );
