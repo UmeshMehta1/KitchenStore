@@ -8,7 +8,7 @@ const orderRoute = require("./routes/user/orderRoute");
 const cartRoute = require("./routes/user/cartRoute");
 const reviewRoute = require("./routes/user/reviewRoute");
 const profileRoute = require("./routes/user/profileRoute");
-
+const cors = require("cors");
 
 // const cors = require("cors")
 const app = express();
@@ -20,9 +20,11 @@ const PORT = process.env.PORT||5000;
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
+app.use(cors())
+
 connectDatabase(process.env.MONGO_URI);
 
-app.use(express.static("./uploads"))
+app.use("/uploads", express.static("uploads"));
 
 
 app.get(("/reg",(req,res)=>{

@@ -4,9 +4,10 @@ const fs = require("fs")
 
 
 exports.createProduct = async (req,res)=>{
-    console.log("hello")
+   
         const file = req.file
         console.log(file)
+        return
         let filePath
          if(!file){
           filePath ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1dQPM88-Vq0f-YM8xILMQdKktXgKBMN6XH9cCBleA&s"
@@ -38,6 +39,9 @@ exports.createProduct = async (req,res)=>{
  
 
 }
+
+
+
 exports.deleteProduct =  async(req,res)=>{
     const {id} = req.params
     if(!id){
@@ -65,7 +69,6 @@ exports.deleteProduct =  async(req,res)=>{
             })
     await Product.findByIdAndDelete(id)
     res.status(200).json({
-
         message : "Product delete successfully"
     })
 
