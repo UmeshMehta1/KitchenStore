@@ -1,21 +1,29 @@
 import React from "react";
 // import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteCartItem, udpateCartItem } from "../../store/cartSlice";
 
 const Cart = () => {
+  const dispatch = useDispatch();
   const { item: products } = useSelector((state) => state.cart);
   console.log("cart", products);
 
-  // const totalItemsInCart = products.reduce((total,item)=>item.quantity + total,0)
-  //   const totalAmountOfCart = products.reduce((amount,item)=> item.quantity * item.product.productPrice + amount,0)
+  const totalItemsInCart = products.reduce(
+    (total, item) => item.quantity + total,
+    0
+  );
+  const totalAmountOfCart = products.reduce(
+    (amount, item) => amount + item.quantity * item.product.productPrice,
+    0
+  );
 
-  // const handleQuantityChange = (productId, newQuantity)=>{
-  //   dispatch(udpateCartItem(productId,newQuantity))
-  // }
+  const handleQuantityChange = (productId, newQuantity) => {
+    dispatch(udpateCartItem(productId, newQuantity));
+  };
 
-  // const handleDelete = (productId)=>{
-  //   dispatch(deleteCartItem(productId))
-  // }
+  const handleDelete = (productId) => {
+    dispatch(deleteCartItem(productId));
+  };
 
   return (
     <div className="flex flex-col md:flex-row w-screen h-full px-14 py-7">
@@ -53,15 +61,13 @@ const Cart = () => {
                 </div>
                 {/* Price Information */}
                 <div className="self-center text-center">
-                  <p className="text-gray-600 font-normal text-sm line-through">
-                    {product.product.productPrice}
-                    <span className="text-emerald-500 ml-2">(-50% OFF)</span>
+                  <p className="text-gray-800 font-normal text-xl">
+                    RS.{product.product.productPrice * product.quantity}
                   </p>
-                  <p className="text-gray-800 font-normal text-xl">$49.99</p>
                 </div>
                 {/* Remove Product Icon */}
                 <div className="self-center">
-                  <button className>
+                  <button onClick={handleDelete(product.product._id)}>
                     <svg
                       className
                       height="24px"
@@ -88,7 +94,15 @@ const Cart = () => {
               </div>
               {/* Product Quantity */}
               <div className="flex flex-row self-center gap-1">
-                <button className="w-5 h-5 self-center rounded-full border border-gray-300">
+                <button
+                  onClick={() =>
+                    handleQuantityChange(
+                      product.product._id,
+                      product.quantity - 1
+                    )
+                  }
+                  className="w-5 h-5 self-center rounded-full border border-gray-300"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -103,11 +117,27 @@ const Cart = () => {
                 </button>
                 <input
                   type="text"
+                  value={product.quantity}
+                  onClick={(e) =>
+                    handleQuantityChange(
+                      product.product._id,
+
+                      e.target.value
+                    )
+                  }
                   readOnly="readonly"
                   defaultValue={1}
                   className="w-8 h-8 text-center text-gray-900 text-sm outline-none border border-gray-300 rounded-sm"
                 />
-                <button className="w-5 h-5 self-center rounded-full border border-gray-300">
+                <button
+                  onClick={() =>
+                    handleQuantityChange(
+                      product.product._id,
+                      product.quantity + 1
+                    )
+                  }
+                  className="w-5 h-5 self-center rounded-full border border-gray-300"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -130,31 +160,15 @@ const Cart = () => {
         <p className="text-blue-900 text-xl font-extrabold">Purchase Resume</p>
         <div className="flex flex-col p-4 gap-4 text-lg font-semibold shadow-md border rounded-sm">
           <div className="flex flex-row justify-between">
-            <p className="text-gray-600">Subtotal (2 Items)</p>
-            <p className="text-end font-bold">$99.98</p>
+            <p className="text-gray-600">Total Items</p>
+            <p className="text-end font-bold">{totalItemsInCart}</p>
           </div>
           <hr className="bg-gray-200 h-0.5" />
+
           <div className="flex flex-row justify-between">
-            <p className="text-gray-600">Freight</p>
+            <p className="text-gray-600">Total Amount</p>
             <div>
-              <p className="text-end font-bold">$3.90</p>
-              <p className="text-gray-600 text-sm font-normal">
-                Arrives on Jul 16
-              </p>
-            </div>
-          </div>
-          <hr className="bg-gray-200 h-0.5" />
-          <div className="flex flex-row justify-between">
-            <p className="text-gray-600">Discount Coupon</p>
-            <a className="text-gray-500 text-base underline" href="#">
-              Add
-            </a>
-          </div>
-          <hr className="bg-gray-200 h-0.5" />
-          <div className="flex flex-row justify-between">
-            <p className="text-gray-600">Total</p>
-            <div>
-              <p className="text-end font-bold">$103.88</p>
+              <p className="text-end font-bold">RS. {totalAmountOfCart}</p>
             </div>
           </div>
           <div className="flex gap-2">
