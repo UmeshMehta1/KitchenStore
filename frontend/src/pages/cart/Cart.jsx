@@ -62,12 +62,12 @@ const Cart = () => {
                 {/* Price Information */}
                 <div className="self-center text-center">
                   <p className="text-gray-800 font-normal text-xl">
-                    RS.{product.product.productPrice * product.quantity}
+                    RS.{product.product.productPrice}
                   </p>
                 </div>
                 {/* Remove Product Icon */}
                 <div className="self-center">
-                  <button onClick={handleDelete(product.product._id)}>
+                  <button onClick={() => handleDelete(product.product._id)}>
                     <svg
                       className
                       height="24px"

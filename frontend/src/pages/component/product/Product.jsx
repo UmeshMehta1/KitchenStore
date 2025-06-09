@@ -12,7 +12,6 @@ const Product = ({ id: productId }) => {
   }, [dispatch, productId]);
 
   const { data: user, selectedProduct } = useSelector((state) => state.product);
-  console.log(user);
 
   const product = selectedProduct?.product?.[0];
 
@@ -80,80 +79,11 @@ const Product = ({ id: productId }) => {
               </span>
               <span className="text-sm text-gray-500 ml-2">1,234 reviews</span>
             </div>
-            <ul className="text-sm text-gray-700 mb-6">
-              <li className="flex items-center mb-1">
-                <svg
-                  className="w-4 h-4 mr-2 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Core i5 Processor (12th Gen)
-              </li>
-              <li className="flex items-center mb-1">
-                <svg
-                  className="w-4 h-4 mr-2 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                8 GB DDR4 RAM
-              </li>
-              <li className="flex items-center mb-1">
-                <svg
-                  className="w-4 h-4 mr-2 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Windows 11 Home
-              </li>
-              <li className="flex items-center">
-                <svg
-                  className="w-4 h-4 mr-2 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                512 GB SSD
-              </li>
-            </ul>
+
             <div className="flex items-center justify-between mb-4">
               <div>
                 <span className="text-3xl font-bold text-gray-900">
-                  $899.00
+                  RS.{product.productPrice}
                 </span>
                 <span className="ml-2 text-sm font-medium text-gray-500 line-through">
                   $1,000.00
