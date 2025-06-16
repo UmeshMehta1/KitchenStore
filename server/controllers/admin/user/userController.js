@@ -9,12 +9,12 @@ exports.getUsers = async(req,res)=>{
             data  : users
         })
     }
+
+
         res.status(404).json({
             message : "User Collection is empty",
             data  : []
         })
-    
- 
 }
 
 // delete User API
@@ -31,6 +31,7 @@ exports.deleteUser = async(req,res)=>{
         res.status(404).json({
             message : "User not found with that userid"
         })
+        
     }else{
         await User.findByIdAndDelete(userId)
         res.status(200).json({

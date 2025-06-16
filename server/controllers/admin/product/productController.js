@@ -7,8 +7,9 @@ exports.createProduct = async (req,res)=>{
    
         const file = req.file
         console.log(file)
-        return
-        let filePath
+       
+        var filePath
+        
          if(!file){
           filePath ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1dQPM88-Vq0f-YM8xILMQdKktXgKBMN6XH9cCBleA&s"
          }else{
