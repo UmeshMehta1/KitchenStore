@@ -13,8 +13,7 @@ exports.createProduct = async (req,res)=>{
          if(!file){
           filePath ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1dQPM88-Vq0f-YM8xILMQdKktXgKBMN6XH9cCBleA&s"
          }else{
-          filePath = req.file.filename
-
+          filePath = process.env.BACKEND_URL + "/uploads/" + req.file.filename
          }
          console.log(req.body)
           const {productName,productDescription,productPrice,productStatus,productStockQty} = req.body
@@ -30,7 +29,7 @@ exports.createProduct = async (req,res)=>{
               productPrice,
               productStatus,
               productStockQty,
-              productImage : process.env.BACKEND_URL +  filePath
+              productImage : filePath
       
           })
           res.status(200).json({
@@ -57,10 +56,18 @@ exports.deleteProduct =  async(req,res)=>{
         })
     }
  
-    const oldProductImage = oldData.productImage // http://localhost:3000/1698943267271-bunImage.png"
-    const lengthToCut  = process.env.BACKEND_URL.length
-    const finalFilePathAfterCut = oldProductImage.slice(lengthToCut) 
+    const oldProductImage = oldData.productImage // http://localhost:3000/uploads/1698943267271-bunImage.png"
+    let finalFilePathAfterCut = ""
+    
+    // Check if the image is a full URL or just a filename
+    if(oldProductImage.includes(process.env.BACKEND_URL)) {
+        const lengthToCut  = (process.env.BACKEND_URL + "/uploads/").length
+        finalFilePathAfterCut = oldProductImage.slice(lengthToCut) 
+    } else if(oldProductImage.includes("/uploads/")) {
+        finalFilePathAfterCut = oldProductImage.split("/uploads/")[1]
+    }
          // REMOVE FILE FROM UPLOADS FOLDER
+        if(finalFilePathAfterCut) {
             fs.unlink("./uploads/" +  finalFilePathAfterCut,(err)=>{
                 if(err){
                     console.log("error deleting file",err) 
@@ -68,6 +75,7 @@ exports.deleteProduct =  async(req,res)=>{
                     console.log("file deleted successfully")
                 }
             })
+        }
     await Product.findByIdAndDelete(id)
     res.status(200).json({
         message : "Product delete successfully"
@@ -91,9 +99,16 @@ exports.editProduct = async(req,res)=>{
         })
     }
  
-    const oldProductImage = oldData.productImage // http://localhost:3000/1698943267271-bunImage.png"
-    const lengthToCut  = process.env.BACKEND_URL.length
-    const finalFilePathAfterCut = oldProductImage.slice(lengthToCut) // 1698943267271-bunImage.png
+    const oldProductImage = oldData.productImage // http://localhost:3000/uploads/1698943267271-bunImage.png"
+    let finalFilePathAfterCut = ""
+    
+    // Check if the image is a full URL or just a filename
+    if(oldProductImage.includes(process.env.BACKEND_URL)) {
+        const lengthToCut  = (process.env.BACKEND_URL + "/uploads/").length
+        finalFilePathAfterCut = oldProductImage.slice(lengthToCut) 
+    } else if(oldProductImage.includes("/uploads/")) {
+        finalFilePathAfterCut = oldProductImage.split("/uploads/")[1]
+    }
     if(req.file && req.file.filename){
         // REMOVE FILE FROM UPLOADS FOLDER
             fs.unlink("./uploads/" +  finalFilePathAfterCut,(err)=>{
@@ -110,7 +125,7 @@ exports.editProduct = async(req,res)=>{
         productPrice,
         productStatus,
         productStockQty,
-        productImage : req.file && req.file.filename ? process.env.BACKEND_URL +  req.file.filename :  oldProductImage
+        productImage : req.file && req.file.filename ? process.env.BACKEND_URL + "/uploads/" + req.file.filename :  oldProductImage
     },{
         new : true,
     

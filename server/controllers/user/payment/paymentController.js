@@ -1,6 +1,6 @@
 const { default: axios } = require("axios")
-const Order = require("../../../model/orderSchema")
-const User = require("../../../model/userModel")
+const Order = require("../../../models/orderSchema")
+const User = require("../../../models/userModel")
 
 exports.initiateKhaltiPayment = async(req,res)=>{
     const {orderId,amount}  = req.body 
@@ -25,7 +25,7 @@ if(order.totalAmount !== amount){
         return_url : "http://localhost:5173/success",
         purchase_order_id : orderId,
         amount : amount * 100,
-        website_url : "http://localhost:3000/",
+        website_url : "http://localhost:5000/",
         purchase_order_name : "orderName_" + orderId
     }
 const response =     await axios.post("https://a.khalti.com/api/v2/epayment/initiate/",data,{

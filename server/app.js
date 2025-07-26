@@ -8,6 +8,8 @@ const orderRoute = require("./routes/user/orderRoute");
 const cartRoute = require("./routes/user/cartRoute");
 const reviewRoute = require("./routes/user/reviewRoute");
 const profileRoute = require("./routes/user/profileRoute");
+const paymentRoute = require("./routes/user/paymentRoute");
+const adminSeeder = require("./adminSeeder");
 const cors = require("cors");
 
 // const cors = require("cors")
@@ -23,6 +25,7 @@ app.use(express.urlencoded({extended : true}))
 app.use(cors())
 
 connectDatabase(process.env.MONGO_URI);
+adminSeeder();
 
 app.use("/uploads", express.static("uploads"));
 
@@ -40,6 +43,7 @@ app.use("/api/orders",orderRoute)
 app.use("/api/cart",cartRoute)
 app.use("/api/reviews",reviewRoute)
 app.use("/api/profile", profileRoute)
+app.use("/api/payment", paymentRoute)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

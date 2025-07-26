@@ -8,7 +8,16 @@ exports.getAllOrders = async(req,res)=>{
         model : "Product"
     }).populate('user')
     
-    if(orders.length == 0 ){
+    // Filter out orders with null products or clean up the data
+    const cleanedOrders = orders.map(order => {
+        const cleanedItems = order.items.filter(item => item.product !== null);
+        return {
+            ...order.toObject(),
+            items: cleanedItems
+        };
+    });
+    
+    if(cleanedOrders.length == 0 ){
         return res.status(404).json({
             message : "No orders",
             data : []
@@ -16,7 +25,7 @@ exports.getAllOrders = async(req,res)=>{
     }
     res.status(200).json({
         message : "Orders Fetched Successfully",
-        data : orders
+        data : cleanedOrders
     })
 }
 
@@ -58,18 +67,24 @@ exports.updateOrderStatus = async(req,res)=>{
     }).populate('user')
 let necessaryData
     if(orderStatus === "delivered"){
-         necessaryData = updatedOrder.items.map((item)=>{
-            return {
-                quantity : item.quantity,
-                productId : item.product._id,
-                productStockQty : item.product.productStockQty
-            }
-        })
+         necessaryData = updatedOrder.items
+            .filter((item) => item.product && item.product._id) // Filter out items with null products
+            .map((item)=>{
+                return {
+                    quantity : item.quantity,
+                    productId : item.product._id,
+                    productStockQty : item.product.productStockQty
+                }
+            })
 
         for(var i = 0 ; i < necessaryData.length; i ++){
-            await Product.findByIdAndUpdate(necessaryData[i].productId,{
-                productStockQty : necessaryData[i].productStockQty - necessaryData[i].quantity
-            })
+            // Add additional check to ensure product exists before updating
+            const product = await Product.findById(necessaryData[i].productId);
+            if(product && product.productStockQty >= necessaryData[i].quantity) {
+                await Product.findByIdAndUpdate(necessaryData[i].productId,{
+                    productStockQty : necessaryData[i].productStockQty - necessaryData[i].quantity
+                })
+            }
         }
 
 

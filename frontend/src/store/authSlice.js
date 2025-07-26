@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { STATUSES } from '../global/mic/statuses'
-import { API } from '../https'
-import axios from 'axios'
+import { API,APIAuthenticated } from '../https'
+
 
 
 const authSlice = createSlice({
@@ -56,7 +56,7 @@ export function registerUser(data){
     return async function registerUserThunk(dispatch){
      
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/register",data)
+            const response = await APIAuthenticated.post("/auth/register",data)
             console.log(response.data.data)
           
             dispatch(setStatus(STATUSES.SUCCESS))
@@ -72,7 +72,7 @@ export function loginUser(data){
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await API.post("/auth/login",data)
+            const response = await APIAuthenticated.post("/auth/login",data)
             console.log(response.data.data)
             dispatch(setUser(response.data.data))
             dispatch(setToken(response.data.token))

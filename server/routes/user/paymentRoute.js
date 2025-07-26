@@ -1,0 +1,13 @@
+const { initiateKhaltiPayment, verifyPidx } = require("../../controllers/user/payment/paymentController")
+const isAuthenticated = require("../../middleware/isAuthenticated")
+const catchAsync = require("../../Services/catchAsync")
+
+const router = require("express").Router()
+
+
+router.route("/").post(isAuthenticated,catchAsync(initiateKhaltiPayment))
+router.route("/verifypidx").post(isAuthenticated, catchAsync(verifyPidx))
+
+
+
+module.exports = router
