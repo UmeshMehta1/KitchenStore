@@ -4,6 +4,7 @@ import { API } from '../../services/api';
 // Async thunks
 export const loginAdmin = createAsyncThunk(
   'auth/loginAdmin',
+  
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await API.post('/auth/admin/login', credentials);
@@ -11,6 +12,7 @@ export const loginAdmin = createAsyncThunk(
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminUser', JSON.stringify(response.data.data));
       }
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
